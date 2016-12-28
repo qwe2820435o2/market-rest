@@ -1,4 +1,7 @@
+import com.kris.rest.component.JedisClient;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 
@@ -35,5 +38,18 @@ public class JedisClusterTest {
 
         //系统关闭时关闭jedisCluster
         jedisCluster.close();
+    }
+
+    @Test
+    public void testJedisClientSpring(){
+        //创建一个spring容器
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring/applicationContext-*.xml");
+        //从容器从获得JedisClient
+        JedisClient jedisClient = applicationContext.getBean(JedisClient.class);
+        //jedisClient操作redis
+        jedisClient.set("cliet1", "1000");
+        String string = jedisClient.get("cliet1");
+        System.out.println(string);
+
     }
 }
