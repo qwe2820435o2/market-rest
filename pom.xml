@@ -16,6 +16,7 @@
     <properties>
         <!--架包版本变量 start-->
 
+
         <!--2016-02-20注释掉代码，切换到spring3试试-->
         <!--mybatis官网看到,如果要使用spring4的话,要用：mybatis-2-spring这个架包,http://blog.mybatis.org/2015/11/spring-4-got-you-down-with-no-ibatis.html-->
         <!--<spring.version>4.0.2.RELEASE</spring.version>-->
@@ -55,6 +56,7 @@
         <httpclient.version>4.3.3</httpclient.version>
         <jackson-databind.version>2.4.2</jackson-databind.version>
         <fastjson.version>1.1.43</fastjson.version>
+        <jedis.version>2.7.2</jedis.version>
         <!--架包版本变量 end-->
 
         <!--插件版本变量 start-->
@@ -70,6 +72,7 @@
         <maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
         <maven-dependency-plugin.version>2.5.1</maven-dependency-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+
         <!--插件版本变量 end-->
 
         <!--其他变量 start-->
@@ -81,6 +84,7 @@
         <tomcat-path.version>/</tomcat-path.version>
         <jetty-port.version>8080</jetty-port.version>
         <jetty-path.version>/</jetty-path.version>
+
         <!--其他变量 end-->
 
         <!--这个配置是为了解决下面两个警告-->
@@ -98,7 +102,12 @@
 
     <!--架包依赖 start-->
     <dependencies>
-
+        <!-- Redis客户端 -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+        </dependency>
         <!-- ############################################################### Spring 相关包 start ############################################################### -->
         <!--spring 源码包下载地址：https://github.com/spring-projects/spring-framework/releases-->
         <!--http://takeme.iteye.com/blog/1977585-->
