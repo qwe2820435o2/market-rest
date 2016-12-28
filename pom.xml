@@ -76,7 +76,7 @@
         <war-name.version>ssm</war-name.version>
         <jdk.version>1.7</jdk.version>
 
-        <tomcat-port.version>8080</tomcat-port.version>
+        <tomcat-port.version>8081</tomcat-port.version>
         <tomcat-uri-encoding.version>UTF-8</tomcat-uri-encoding.version>
         <tomcat-path.version>/</tomcat-path.version>
         <jetty-port.version>8080</jetty-port.version>
