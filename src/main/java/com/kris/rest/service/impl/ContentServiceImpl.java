@@ -2,6 +2,7 @@ package com.kris.rest.service.impl;
 
 import com.kris.rest.component.JedisClient;
 import com.kris.rest.mapper.TbContentMapper;
+import com.kris.rest.pojo.TaotaoResult;
 import com.kris.rest.pojo.TbContent;
 import com.kris.rest.pojo.TbContentExample;
 import com.kris.rest.service.ContentService;
@@ -62,5 +63,11 @@ public class ContentServiceImpl implements ContentService{
             e.printStackTrace();
         }
         return list;
+    }
+
+    @Override
+    public TaotaoResult syncContent(Long cid) {
+        mJedisClient.hdel(REDIS_CONTENT_KEY, cid + "");
+        return TaotaoResult.ok();
     }
 }

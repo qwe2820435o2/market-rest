@@ -1,5 +1,6 @@
 package com.kris.rest.service;
 
+import com.kris.rest.pojo.TaotaoResult;
 import com.kris.rest.pojo.TbContent;
 
 import java.util.List;
@@ -10,4 +11,5 @@ import java.util.List;
  */
 public interface ContentService {
     List<TbContent> getContentList(Long cid);
+    TaotaoResult syncContent(Long cid);
 }
