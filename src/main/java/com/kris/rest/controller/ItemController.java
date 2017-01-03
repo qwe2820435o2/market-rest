@@ -1,7 +1,9 @@
 package com.kris.rest.controller;
 
+import com.kris.rest.pojo.TaotaoResult;
 import com.kris.rest.pojo.TbItem;
 import com.kris.rest.service.ItemService;
+import com.kris.rest.utils.ExceptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,15 +15,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @create 2016-12-12 15:47
  */
 @Controller
+@RequestMapping("/item")
 public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @RequestMapping("/item/{itemId}")
+    @RequestMapping("/base/{itemId}")
     @ResponseBody
-    private TbItem getItemById(@PathVariable Long itemId) {
-        TbItem item = itemService.getItemById(itemId);
-        return item;
+    private TaotaoResult getItemById(@PathVariable Long itemId) {
+        try {
+            TbItem item = itemService.getItemById(itemId);
+            return TaotaoResult.ok(item);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
+        }
     }
 
 }

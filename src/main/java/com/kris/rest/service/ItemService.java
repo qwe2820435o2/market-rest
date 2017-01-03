@@ -1,6 +1,7 @@
 package com.kris.rest.service;
 
 import com.kris.rest.pojo.TbItem;
+import com.kris.rest.pojo.TbItemDesc;
 
 /**
  * @author kris
@@ -8,4 +9,5 @@ import com.kris.rest.pojo.TbItem;
  */
 public interface ItemService {
     TbItem getItemById(Long itemId);
+    TbItemDesc getItemDescById(Long itemId);
 }
