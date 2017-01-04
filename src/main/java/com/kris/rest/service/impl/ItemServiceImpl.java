@@ -3,9 +3,8 @@ package com.kris.rest.service.impl;
 import com.kris.rest.component.JedisClient;
 import com.kris.rest.mapper.TbItemDescMapper;
 import com.kris.rest.mapper.TbItemMapper;
-import com.kris.rest.pojo.TbItem;
-import com.kris.rest.pojo.TbItemDesc;
-import com.kris.rest.pojo.TbItemExample;
+import com.kris.rest.mapper.TbItemParamItemMapper;
+import com.kris.rest.pojo.*;
 import com.kris.rest.service.ItemService;
 import com.kris.rest.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +26,8 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     private TbItemDescMapper mItemDescMapper;
     @Autowired
+    private TbItemParamItemMapper mItemParamItemMapper;
+    @Autowired
     private JedisClient mJedisClient;
 
     @Value("${REDIS_ITEM_KEY}")
@@ -37,6 +38,8 @@ public class ItemServiceImpl implements ItemService {
     private Integer ITEM_EXPIRE_SECOND;
     @Value("${ITEM_DESC_KEY}")
     private String ITEM_DESC_KEY;
+    @Value("${ITEM_PARAM_KEY}")
+    private String ITEM_PARAM_KEY;
 
     @Override
     public TbItem getItemById(Long itemId) {
@@ -108,5 +111,43 @@ public class ItemServiceImpl implements ItemService {
             e.printStackTrace();
         }
         return itemDesc;
+    }
+
+    @Override
+    public TbItemParamItem getItemParamById(Long itemId) {
+        //添加缓存逻辑
+        //查询缓存
+        //查询缓存，如果有缓存，直接返回
+        try {
+            String json = mJedisClient.get(REDIS_ITEM_KEY + ":" + itemId + ":" + ITEM_PARAM_KEY);
+            //判断数据是否存在
+            if (StringUtils.isNotEmpty(json)) {
+                //把json数据转换为java对象
+                TbItemParamItem itemParamItem = JsonUtils.jsonToPojo(json, TbItemParamItem.class);
+                return itemParamItem;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //根据商品id查询规格参数
+        TbItemParamItemExample example = new TbItemParamItemExample();
+        TbItemParamItemExample.Criteria criteria = example.createCriteria();
+        criteria.andItemIdEqualTo(itemId);
+        List<TbItemParamItem> list = mItemParamItemMapper.selectByExampleWithBLOBs(example);
+        //取规格参数
+        if (list != null && list.size() > 0) {
+            TbItemParamItem itemParamItem = list.get(0);
+            //添加缓存
+            try {
+                //向redis添加缓存
+                mJedisClient.set(REDIS_ITEM_KEY + ":" + itemId + ":" + ITEM_PARAM_KEY, JsonUtils.objectToJson(itemParamItem));
+                //设置key的过期时间
+                mJedisClient.expire(REDIS_ITEM_KEY + ":" + itemId + ":" + ITEM_PARAM_KEY, ITEM_EXPIRE_SECOND);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return itemParamItem;
+        }
+        return null;
     }
 }

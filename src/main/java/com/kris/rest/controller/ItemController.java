@@ -3,6 +3,7 @@ package com.kris.rest.controller;
 import com.kris.rest.pojo.TaotaoResult;
 import com.kris.rest.pojo.TbItem;
 import com.kris.rest.pojo.TbItemDesc;
+import com.kris.rest.pojo.TbItemParamItem;
 import com.kris.rest.service.ItemService;
 import com.kris.rest.utils.ExceptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,18 @@ public class ItemController {
         try {
             TbItemDesc itemDesc = itemService.getItemDescById(itemId);
             return TaotaoResult.ok(itemDesc);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
+        }
+    }
+
+    @RequestMapping("/param/{itemId}")
+    @ResponseBody
+    public TaotaoResult getItemParamById(@PathVariable Long itemId) {
+        try {
+            TbItemParamItem itemParamItem = itemService.getItemParamById(itemId);
+            return TaotaoResult.ok(itemParamItem);
         } catch (Exception e) {
             e.printStackTrace();
             return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
